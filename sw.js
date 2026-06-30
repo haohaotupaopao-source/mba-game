@@ -1,7 +1,7 @@
 // Service Worker for MBA · 绝望的烤鸡
 // Offline-first: caches the app shell so it works without network
 
-const CACHE = 'mba-v3';
+const CACHE = 'mba-v4';
 const SHELL = [
   '.',
   'index.html',
