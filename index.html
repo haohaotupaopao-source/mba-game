@@ -61,19 +61,11 @@ body{font-family:var(--font);background:radial-gradient(circle at 50% -120px,rgb
 .mood-btn{width:36px;height:36px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;background:var(--surface);transition:all var(--dur) var(--ease)}
 .mood-btn:active{transform:scale(0.9)}
 .mood-btn.selected{border-color:var(--gold);background:var(--gold);color:#000;transform:scale(1.1);box-shadow:0 0 10px rgba(232,160,37,0.3)}
-/* MORNING REVIEW/PLAN */
-.morning-review{background:linear-gradient(180deg,var(--card),var(--surface));border:1px solid var(--border-soft);border-radius:var(--radius-lg);margin-bottom:12px;overflow:hidden}
-.morning-review .mr-header{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-size:14px;font-weight:800}
-.morning-review .mr-header .arr{transition:transform var(--dur) var(--ease)}
-.morning-review .mr-header.open .arr{transform:rotate(180deg)}
-.morning-review .mr-body{padding:0 16px 16px;display:none}
-.morning-review .mr-body.open{display:block;animation:fadeUp .2s var(--ease)}
-.mr-section-title{font-size:12px;font-weight:700;color:var(--gold);margin:12px 0 8px;display:flex;align-items:center;gap:6px}
-.mr-question{font-size:11px;color:var(--text-dim);margin-bottom:4px}
-.mr-textarea{width:100%;min-height:48px;background:rgba(255,255,255,0.04);border:1px solid var(--border-soft);border-radius:var(--radius-sm);padding:10px 12px;color:var(--text);font-size:12px;font-family:var(--font);resize:vertical;transition:border-color var(--dur) var(--ease);line-height:1.5}
-.mr-textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(242,107,33,0.16)}
-.mr-textarea+.mr-question{margin-top:10px}
-.mr-done-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:12px;background:rgba(39,174,96,0.15);color:var(--win);font-size:10px;font-weight:600}
+/* MC HISTORY */
+.mc-history-strip{display:flex;gap:4px;align-items:center;margin-top:8px;flex-wrap:wrap}
+.mc-history-dot{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;border:1px solid var(--border-soft)}
+.mc-insight{font-size:10px;color:var(--text-dim);margin-top:4px;line-height:1.5}
+.mc-insight b{color:var(--gold)}
 /* MATCH PREDICTOR */
 .match-bar{background:linear-gradient(135deg,#192537,#111827);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-lg);padding:14px 16px;margin-bottom:14px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;transition:all var(--dur) var(--ease);box-shadow:var(--shadow)}
 .match-bar:hover{box-shadow:var(--shadow-lg)}
@@ -219,32 +211,10 @@ body{font-family:var(--font);background:radial-gradient(circle at 50% -120px,rgb
 <div class="mc-group"><div class="mc-label">今日情绪 (1-5)</div><div class="mood-row" id="mcMood"></div></div>
 </div>
 </div>
-<div class="morning-review" id="morningReviewPanel">
-<div class="mr-header" id="mrToggle" onclick="toggleMorningReview()">📝 复盘与计划 <span class="arr">▼</span></div>
-<div class="mr-body" id="mrBody">
-<div class="mr-section-title">🔙 昨日复盘</div>
-<div class="mr-question">昨天做对了什么？</div>
-<textarea class="mr-textarea" id="mrDidRight" placeholder="值得继续的做法..." onchange="saveMorningReview()"></textarea>
-<div class="mr-question">昨天做错了什么？</div>
-<textarea class="mr-textarea" id="mrDidWrong" placeholder="需要改进的地方..." onchange="saveMorningReview()"></textarea>
-<div class="mr-question">昨天学到了什么？</div>
-<textarea class="mr-textarea" id="mrLearned" placeholder="新的认知或发现..." onchange="saveMorningReview()"></textarea>
-<div class="mr-question">意外收获</div>
-<textarea class="mr-textarea" id="mrSurprise" placeholder="计划外的好事..." onchange="saveMorningReview()"></textarea>
-<div class="mr-section-title">📋 今日计划</div>
-<div class="mr-question">今天最重要的一件事是什么？</div>
-<textarea class="mr-textarea" id="mrMostImportant" placeholder="只能做一件事的话..." onchange="saveMorningReview()"></textarea>
-<div class="mr-question">今天哪个球员会变强？怎么变强？</div>
-<textarea class="mr-textarea" id="mrPlayerGrow" placeholder="具体的成长行动..." onchange="saveMorningReview()"></textarea>
-<div class="mr-question">今天可能遇到什么阻碍？如何应对？</div>
-<textarea class="mr-textarea" id="mrObstacle" placeholder="预判阻力，提前准备..." onchange="saveMorningReview()"></textarea>
-<div style="margin-top:12px"><button class="btn btn-primary" onclick="saveMorningReview(true)" style="width:100%">💾 保存复盘与计划</button></div>
-</div>
-</div>
 <div class="match-bar" id="matchBar">
 <div class="team">DRC <span id="dayTypeLabel" style="font-size:10px;font-weight:400;color:var(--text-dim);margin-left:6px"></span></div>
 <div id="matchCenter" style="text-align:center"><span class="score" id="matchScore">0</span>/8</div>
-<div style="display:flex;align-items:center;gap:8px"><span id="opponentName" style="font-size:12px;color:var(--text-dim)"></span><div class="result-tag draw" id="matchTag">待开赛</div></div>
+<div style="display:flex;align-items:center;gap:8px;justify-content:flex-end"><span id="opponentName" style="font-size:12px;color:var(--text-dim)"></span><div class="result-tag draw" id="matchTag">待开赛</div></div>
 </div>
 <div class="task-grid" id="taskGrid"></div>
 </div>
@@ -308,6 +278,23 @@ const PLAYERS=[
 {id:'nowitzki',name:'诺维斯基',pos:'第7人',dim:'家庭与亲密',initRating:75,target:92,priority:'P3',emoji:'🏠',task:'今天有高质量陪伴吗',color:'#007DC5'},
 {id:'shaq',name:'奥尼尔',pos:'第8人',dim:'社群与关系',initRating:75,target:92,priority:'P3',emoji:'🤝',task:'今天有真诚互动吗',color:'#8E44AD'}
 ];
+const CONST={
+  RATING_MIN:40,RATING_MAX:99,RATING_BASE:70,
+  SEASON_DAYS:90,REGULAR_SEASON_END:75,PLAYOFF_END:87,SETTLEMENT_START:88,
+  STREAK_BONUS_3:1,STREAK_BONUS_7:4,STREAK_BONUS_WEEKLY:5,
+  MISS_PENALTY_3:1,MISS_PENALTY_7:3,MISS_PENALTY_WEEKLY:3,
+  ACTIVE_STREAK_THRESHOLD:4,
+  WARNING_YELLOW_DAYS:3,WARNING_ORANGE_DAYS:14,
+  RECENT_GAMES_MAX:10,HISTORY_MAX:90,
+  MORNING_HISTORY_MAX:30,
+  MS_PER_DAY:864e5,BEIJING_OFFSET:288e5,DAY_BOUNDARY_HOUR:6,
+  GAMES_REGULAR:35,GAMES_PLAYOFF:8,
+  MATCH_THRESHOLD_GREAT:0.85,MATCH_THRESHOLD_SMALL:0.65,MATCH_THRESHOLD_CLOSE:0.45,MATCH_THRESHOLD_MIN:0.25,MATCH_BASE_THRESHOLD:0.45,
+  TRAINING_THRESHOLD_HIGH:0.60,TRAINING_THRESHOLD_LIGHT:0.35,
+  LEVEL_TASKS_PER:50,STORAGE_KEY:'minho_os_v8',DATA_VERSION:1,
+  GAME_DAYS_SEED_MULTIPLIER:31337,GAME_DAYS_SEED_ADD:42,SCHEDULE_OFFSET_MULTIPLIER:7,
+  WEEK_ORDER_COUNT:8,PLAYER_COUNT:8
+};
 const WEEK_ORDER=['jokic','duncan','curry','lebron','kobe','giannis','nowitzki','shaq'];
 
 const OPPONENTS=[
@@ -379,7 +366,8 @@ function getDefault(){
     today:today(),
     dailyCompleted:{},
     morningCheck:{sleepTime:'',sleepDuration:'',mood:0},
-    morningReview:{didRight:'',didWrong:'',learned:'',surprise:'',mostImportant:'',playerGrow:'',obstacle:'',saved:false},
+    morningCheckHistory:[],
+    _dataVersion:CONST.DATA_VERSION,
     wins:0,losses:0,recentGames:[],
     totalTasksDone:0,totalDays:0,
     awards:[],history:[],
@@ -387,8 +375,15 @@ function getDefault(){
     archive:[]
   };
 }
-function load(){const r=localStorage.getItem('minho_os_v8');if(!r)return getDefault();try{return JSON.parse(r)}catch(e){return getDefault()}}
-function save(){localStorage.setItem('minho_os_v8',JSON.stringify(G))}
+function migrate(data){
+  if(!data._dataVersion||data._dataVersion<CONST.DATA_VERSION){
+    if(!data.morningCheckHistory)data.morningCheckHistory=[];
+    data._dataVersion=CONST.DATA_VERSION;
+  }
+  return data;
+}
+function load(){const r=localStorage.getItem(CONST.STORAGE_KEY);if(!r)return getDefault();try{return migrate(JSON.parse(r))}catch(e){return getDefault()}}
+function save(){localStorage.setItem(CONST.STORAGE_KEY,JSON.stringify(G))}
 let G=load();
 
 // ============================================================
@@ -397,12 +392,11 @@ let G=load();
 function dateStr(d){return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
 function beijingNow(){
   const now=new Date();
-  return new Date(now.getTime()+(8*3600000)+(now.getTimezoneOffset()*60000));
+  return new Date(now.getTime()+CONST.BEIJING_OFFSET+(now.getTimezoneOffset()*60000));
 }
 function today(){
   const bj=beijingNow();
-  // Day boundary at 6am Beijing time — before 6am counts as previous day
-  if(bj.getHours()<6) bj.setDate(bj.getDate()-1);
+  if(bj.getHours()<CONST.DAY_BOUNDARY_HOUR) bj.setDate(bj.getDate()-1);
   return dateStr(bj);
 }
 function calcInitialOrdinal(){
@@ -449,12 +443,12 @@ function realDateForDay(dayNum){
 function formatDate(d){
   return`${d.getMonth()+1}/${d.getDate()}`;
 }
-function rawSeasonDay(){return Math.floor((new Date(today())-new Date(G.seasonStart))/(864e5))+1}
-function seasonDay(){return Math.max(1,Math.min(90,rawSeasonDay()))}
-function currentWeekIdx(){return Math.floor((seasonDay()-1)/7)%8}
+function rawSeasonDay(){return Math.floor((new Date(today())-new Date(G.seasonStart))/(CONST.MS_PER_DAY))+1}
+function seasonDay(){return Math.max(1,Math.min(CONST.SEASON_DAYS,rawSeasonDay()))}
+function currentWeekIdx(){return Math.floor((seasonDay()-1)/7)%CONST.WEEK_ORDER_COUNT}
 function mainPlayerId(){return WEEK_ORDER[currentWeekIdx()]}
 function mainPlayer(){return PLAYERS.find(p=>p.id===mainPlayerId())}
-function phase(){const d=seasonDay();if(d<=75)return'常规赛';if(d<=87)return'季后赛';return'赛季结算'}
+function phase(){const d=seasonDay();if(d<=CONST.REGULAR_SEASON_END)return'常规赛';if(d<=CONST.PLAYOFF_END)return'季后赛';return'赛季结算'}
 function completedCount(){return Object.values(G.dailyCompleted).filter(Boolean).length}
 
 // Seeded PRNG for deterministic schedule per season
@@ -468,56 +462,46 @@ function seededRng(seed){
 // Playoffs: 8 games in 12 days (days 76-87)
 // Pattern: mostly alternating, some 2-day streaks, rare 3-day streaks
 function generateGameDays(ordinal){
-  const rng=seededRng((ordinal||0)*31337+42);
+  const rng=seededRng((ordinal||0)*CONST.GAME_DAYS_SEED_MULTIPLIER+CONST.GAME_DAYS_SEED_ADD);
   const gameDays=new Set();
-  // Regular season: 35 games in days 1-75
-  let day=1;
-  let gamesPlaced=0;
-  while(gamesPlaced<35&&day<=75){
+  let day=1;let gamesPlaced=0;
+  while(gamesPlaced<CONST.GAMES_REGULAR&&day<=CONST.REGULAR_SEASON_END){
     gameDays.add(day);gamesPlaced++;
-    if(gamesPlaced>=35)break;
-    // Decide gap pattern
+    if(gamesPlaced>=CONST.GAMES_REGULAR)break;
     const roll=rng();
-    if(roll<0.35&&day+1<=75&&gamesPlaced<35){
-      // 35%: consecutive 2 games (add tomorrow too)
+    if(roll<0.35&&day+1<=CONST.REGULAR_SEASON_END&&gamesPlaced<CONST.GAMES_REGULAR){
       day++;gameDays.add(day);gamesPlaced++;
-      if(gamesPlaced>=35)break;
-      // After 2 consecutive, rest 1-2 days
+      if(gamesPlaced>=CONST.GAMES_REGULAR)break;
       day+=rng()<0.5?2:3;
-    }else if(roll<0.45&&day+2<=75&&gamesPlaced+1<35){
-      // 10%: consecutive 3 games
+    }else if(roll<0.45&&day+2<=CONST.REGULAR_SEASON_END&&gamesPlaced+1<CONST.GAMES_REGULAR){
       day++;gameDays.add(day);gamesPlaced++;
-      if(gamesPlaced>=35)break;
+      if(gamesPlaced>=CONST.GAMES_REGULAR)break;
       day++;gameDays.add(day);gamesPlaced++;
-      if(gamesPlaced>=35)break;
-      // After 3 consecutive, rest 2-3 days
+      if(gamesPlaced>=CONST.GAMES_REGULAR)break;
       day+=rng()<0.5?3:4;
     }else{
-      // 55%: single game then rest 1-2 days
       day+=rng()<0.6?2:3;
     }
   }
-  // If we didn't place enough (unlikely), fill remaining slots
-  if(gamesPlaced<35){
-    for(let d=1;d<=75&&gamesPlaced<35;d++){
+  if(gamesPlaced<CONST.GAMES_REGULAR){
+    for(let d=1;d<=CONST.REGULAR_SEASON_END&&gamesPlaced<CONST.GAMES_REGULAR;d++){
       if(!gameDays.has(d)){gameDays.add(d);gamesPlaced++;}
     }
   }
-  // Playoffs: 8 games in days 76-87 (deterministic random pattern)
-  let pDay=76;let pGames=0;
-  while(pGames<8&&pDay<=87){
+  let pDay=CONST.PLAYOFF_END-11;let pGames=0;
+  while(pGames<CONST.GAMES_PLAYOFF&&pDay<=CONST.PLAYOFF_END){
     gameDays.add(pDay);pGames++;
-    if(pGames>=8)break;
+    if(pGames>=CONST.GAMES_PLAYOFF)break;
     const pr=rng();
-    if(pr<0.4&&pDay+1<=87&&pGames<8){
+    if(pr<0.4&&pDay+1<=CONST.PLAYOFF_END&&pGames<CONST.GAMES_PLAYOFF){
       pDay++;gameDays.add(pDay);pGames++;
-      if(pGames>=8)break;
+      if(pGames>=CONST.GAMES_PLAYOFF)break;
       pDay+=2;
     }else{
       pDay+=rng()<0.5?1:2;
     }
   }
-  if(pGames<8){for(let d=76;d<=87&&pGames<8;d++){if(!gameDays.has(d)){gameDays.add(d);pGames++;}}}
+  if(pGames<CONST.GAMES_PLAYOFF){for(let d=CONST.PLAYOFF_END-11;d<=CONST.PLAYOFF_END&&pGames<CONST.GAMES_PLAYOFF;d++){if(!gameDays.has(d)){gameDays.add(d);pGames++;}}}
   return gameDays;
 }
 
@@ -533,19 +517,19 @@ function getGameDays(){
 
 function isGameDay(d){
   if(!d)d=seasonDay();
-  if(d>87)return false; // settlement: no games
+  if(d>CONST.PLAYOFF_END)return false;
   return getGameDays().has(d);
 }
 function todayLabel(){
   const d=seasonDay();
-  if(d<=75)return isGameDay(d)?'常规赛·比赛日':'常规赛·训练日';
-  if(d<=87)return'季后赛·比赛日';
+  if(d<=CONST.REGULAR_SEASON_END)return isGameDay(d)?'常规赛·比赛日':'常规赛·训练日';
+  if(d<=CONST.PLAYOFF_END)return'季后赛·比赛日';
   return'赛季结算';
 }
 
 // Generate season schedule: assigns opponents to each game day
 function buildSchedule(ordinal){
-  const offset=(ordinal||0)*7%OPPONENTS.length;
+  const offset=(ordinal||0)*CONST.SCHEDULE_OFFSET_MULTIPLIER%OPPONENTS.length;
   const opps=[...OPPONENTS.slice(offset),...OPPONENTS.slice(0,offset)];
   const gameDays=generateGameDays(ordinal);
   const sorted=[...gameDays].sort((a,b)=>a-b);
@@ -555,24 +539,22 @@ function buildSchedule(ordinal){
     const home=i%2===0;
     let phaseLabel='常规赛';
     if(d<=5)phaseLabel='季前赛';
-    else if(d>75)phaseLabel='季后赛';
+    else if(d>CONST.REGULAR_SEASON_END)phaseLabel='季后赛';
     schedule.push({day:d,opponent:opp,home,gameNo:i+1,phase:phaseLabel});
   });
   return schedule;
 }
 
-// Get today's fixture (if game day)
-function todayFixture(){
+function todayFixture(schedule){
   const d=seasonDay();
   if(!isGameDay(d))return null;
-  const sched=buildSchedule(G.seasonOrdinal||0);
+  const sched=schedule||buildSchedule(G.seasonOrdinal||0);
   return sched.find(f=>f.day===d)||null;
 }
 
-// Get next upcoming game
-function nextFixture(){
+function nextFixture(schedule){
   const d=seasonDay();
-  const sched=buildSchedule(G.seasonOrdinal||0);
+  const sched=schedule||buildSchedule(G.seasonOrdinal||0);
   return sched.find(f=>f.day>=d)||null;
 }
 
@@ -626,13 +608,12 @@ function calcMatchScore(completed){
   PLAYERS.forEach(p=>{
     const ps=G.players[p.id];
     const pw=PRIORITY_WEIGHT[p.priority];
-    const ovrMul=ps.rating/70; // OVR 70=1.0x, 55=0.79x, 92=1.31x
+    const ovrMul=ps.rating/CONST.RATING_BASE;
     const impact=pw*ovrMul;
     maxScore+=impact;
     if(completed[p.id]){
       score+=impact;
     }else{
-      // P0/P1 not done = penalty (makes it harder to win)
       if(p.priority==='P0')score-=impact*0.5;
       else if(p.priority==='P1')score-=impact*0.3;
     }
@@ -642,11 +623,11 @@ function calcMatchScore(completed){
 
 function matchResult(completed){
   const{score,maxScore,pct}=calcMatchScore(completed);
-  const diff=Math.round(score-maxScore*0.45); // net differential vs 45% threshold
-  if(pct>=0.85)return{tag:'大胜',cls:'win',pts:diff,pct};
-  if(pct>=0.65)return{tag:'小胜',cls:'win',pts:diff,pct};
-  if(pct>=0.45)return{tag:'险胜',cls:'win',pts:diff,pct};
-  if(pct>=0.25)return{tag:'小负',cls:'lose',pts:diff,pct};
+  const diff=Math.round(score-maxScore*CONST.MATCH_BASE_THRESHOLD);
+  if(pct>=CONST.MATCH_THRESHOLD_GREAT)return{tag:'大胜',cls:'win',pts:diff,pct};
+  if(pct>=CONST.MATCH_THRESHOLD_SMALL)return{tag:'小胜',cls:'win',pts:diff,pct};
+  if(pct>=CONST.MATCH_THRESHOLD_CLOSE)return{tag:'险胜',cls:'win',pts:diff,pct};
+  if(pct>=CONST.MATCH_THRESHOLD_MIN)return{tag:'小负',cls:'lose',pts:diff,pct};
   return{tag:'大负',cls:'lose',pts:diff,pct};
 }
 
@@ -654,7 +635,7 @@ function calcTrainingScore(completed){
   let score=0,maxScore=0;
   PLAYERS.forEach(p=>{
     const ps=G.players[p.id];
-    const impact=PRIORITY_WEIGHT[p.priority]*(ps.rating/70);
+    const impact=PRIORITY_WEIGHT[p.priority]*(ps.rating/CONST.RATING_BASE);
     maxScore+=impact;
     if(completed[p.id])score+=impact;
   });
@@ -664,66 +645,65 @@ function trainingResult(completed){
   const count=Object.values(completed).filter(Boolean).length;
   const tr=calcTrainingScore(completed);
   if(count===0)return{tag:'训练日',cls:'none',pct:0};
-  if(tr.pct>=0.6)return{tag:'高效训练',cls:'win',pct:tr.pct};
-  if(tr.pct>=0.35)return{tag:'轻度训练',cls:'warning',pct:tr.pct};
+  if(tr.pct>=CONST.TRAINING_THRESHOLD_HIGH)return{tag:'高效训练',cls:'win',pct:tr.pct};
+  if(tr.pct>=CONST.TRAINING_THRESHOLD_LIGHT)return{tag:'轻度训练',cls:'warning',pct:tr.pct};
   return{tag:'已训练',cls:'draw',pct:tr.pct};
 }
 
 function dailyReset(){
   if(G.today===today())return;
-  // settle yesterday
   const yComp=G.dailyCompleted;
   const yCount=Object.values(yComp).filter(Boolean).length;
-  const yDay=seasonDay()-1; // yesterday's season day (approx)
-  if(G.totalDays>0||yCount>0){
-    // streaks always update regardless of game day
+  const yDay=rawSeasonDay()-1; // yesterday's actual day, unclamped
+  if(yDay>0){
     PLAYERS.forEach(p=>{
       const ps=G.players[p.id];
       if(yComp[p.id]){
         ps.streak++;ps.missStreak=0;
-        if(ps.streak===3)ps.rating=Math.min(99,ps.rating+1);
-        if(ps.streak===7)ps.rating=Math.min(99,ps.rating+4);
-        if(ps.streak>7&&ps.streak%7===0)ps.rating=Math.min(99,ps.rating+5);
+        if(ps.streak===3)ps.rating=Math.min(CONST.RATING_MAX,ps.rating+CONST.STREAK_BONUS_3);
+        if(ps.streak===7)ps.rating=Math.min(CONST.RATING_MAX,ps.rating+CONST.STREAK_BONUS_7);
+        if(ps.streak>7&&ps.streak%7===0)ps.rating=Math.min(CONST.RATING_MAX,ps.rating+CONST.STREAK_BONUS_WEEKLY);
       }else{
         ps.missStreak++;ps.streak=0;
-        if(ps.missStreak===3)ps.rating=Math.max(40,ps.rating-1);
-        if(ps.missStreak===7)ps.rating=Math.max(40,ps.rating-3);
-        if(ps.missStreak>7&&ps.missStreak%7===0)ps.rating=Math.max(40,ps.rating-3);
+        if(ps.missStreak===3)ps.rating=Math.max(CONST.RATING_MIN,ps.rating-CONST.MISS_PENALTY_3);
+        if(ps.missStreak===7)ps.rating=Math.max(CONST.RATING_MIN,ps.rating-CONST.MISS_PENALTY_7);
+        if(ps.missStreak>7&&ps.missStreak%7===0)ps.rating=Math.max(CONST.RATING_MIN,ps.rating-CONST.MISS_PENALTY_WEEKLY);
       }
     });
-    // Only settle W/L on game days
     if(isGameDay(yDay)){
       const mr=matchResult(yComp);
       if(mr.cls==='win'){G.wins++}else{G.losses++}
       G.recentGames.push(mr.cls==='lose'?'L':'W');
-      if(G.recentGames.length>10)G.recentGames.shift();
-      // find fixture for that day
+      if(G.recentGames.length>CONST.RECENT_GAMES_MAX)G.recentGames.shift();
       const sched=buildSchedule(G.seasonOrdinal||0);
       const fix=sched.find(f=>f.day===yDay);
       G.history.push({date:G.today,completed:yCount,result:mr.tag,pct:mr.pct,isGame:true,opponent:fix?fix.opponent.name:null});
     }else{
       G.history.push({date:G.today,completed:yCount,result:'训练',isGame:false});
     }
-    if(G.history.length>90)G.history.shift();
-    // track weekly main player completion
+    if(G.history.length>CONST.HISTORY_MAX)G.history.shift();
     if(!G.weeklyMain)G.weeklyMain={};
-    const weekMainId=WEEK_ORDER[Math.floor((seasonDay()-2)/7)%8];
+    const weekMainId=WEEK_ORDER[Math.floor((yDay-1)/7)%CONST.WEEK_ORDER_COUNT];
     if(yComp[weekMainId]){
       G.weeklyMain[weekMainId]=(G.weeklyMain[weekMainId]||0)+1;
       if(G.weeklyMain[weekMainId]>=7&&!G.awards.includes('week_best')){
         G.awards.push('week_best');toast('🏅 周最佳球员！');
       }
     }
-    if(yCount>=4){G.activeStreak++}else{G.activeStreak=0}
+    if(yCount>=CONST.ACTIVE_STREAK_THRESHOLD){G.activeStreak++}else{G.activeStreak=0}
+    G.totalDays++;
   }
-  G.totalDays++;
+  // Save morning check history before clearing
+  if(!G.morningCheckHistory)G.morningCheckHistory=[];
+  if(G.morningCheck.sleepTime||G.morningCheck.sleepDuration||G.morningCheck.mood){
+    G.morningCheckHistory.push({date:G.today,...G.morningCheck});
+    if(G.morningCheckHistory.length>CONST.MORNING_HISTORY_MAX)G.morningCheckHistory=G.morningCheckHistory.slice(-CONST.MORNING_HISTORY_MAX);
+  }
   G.today=today();
-  checkAwards(yComp); // check awards with YESTERDAY's completions before clearing
+  checkAwards(yComp);
   G.dailyCompleted={};
   G.morningCheck={sleepTime:'',sleepDuration:'',mood:0};
-  G.morningReview={didRight:'',didWrong:'',learned:'',surprise:'',mostImportant:'',playerGrow:'',obstacle:'',saved:false};
-  // Check if season ended (day > 90)
-  while(rawSeasonDay()>90){archiveSeason();}
+  while(rawSeasonDay()>CONST.SEASON_DAYS){if(!shouldAdvanceSeason())break;archiveSeason();}
   save();
 }
 
@@ -746,7 +726,7 @@ function checkAwards(yesterdayComp){
     const ps=G.players[p.id];
     if(ps.rating>=p.initRating+10&&!earned.includes('rookie')){earned.push('rookie');toast('🌱 最佳新秀！')}
     if(ps.rating>=p.initRating+15&&!earned.includes('mip')){earned.push('mip');toast('🚀 最快进步！')}
-    if(ps.rating>=92&&!earned.includes('hundred')){earned.push('hundred');toast('💯 百分俱乐部！')}
+    if(ps.rating>=CONST.RATING_MAX-7&&!earned.includes('hundred')){earned.push('hundred');toast('💯 百分俱乐部！')}
     if(p.id==='duncan'&&ps.rating>=p.initRating+10&&!earned.includes('dpoy')){earned.push('dpoy');toast('🛡️ 最佳防守！')}
     if(p.id==='jokic'&&ps.rating>=p.initRating+5&&!earned.includes('finance')){earned.push('finance');toast('💵 财务健康！')}
   });
@@ -755,46 +735,77 @@ function checkAwards(yesterdayComp){
 }
 
 function getWarning(){
-  let maxMiss=0,p0p1Miss=0;
+  let maxMiss=0,atRisk=[],p0p1Miss=0;
   PLAYERS.forEach(p=>{
     const ps=G.players[p.id];
     maxMiss=Math.max(maxMiss,ps.missStreak);
-    if((p.priority==='P0'||p.priority==='P1')&&ps.missStreak>=14)p0p1Miss++;
+    if(ps.missStreak>=CONST.WARNING_YELLOW_DAYS)atRisk.push(p);
+    if((p.priority==='P0'||p.priority==='P1')&&ps.missStreak>=CONST.WARNING_ORANGE_DAYS)p0p1Miss++;
   });
-  if(p0p1Miss>=2)return'red';
-  if(maxMiss>=14)return'orange';
-  if(maxMiss>=3)return'yellow';
-  return'';
+  return{level:p0p1Miss>=2?'red':maxMiss>=CONST.WARNING_ORANGE_DAYS?'orange':maxMiss>=CONST.WARNING_YELLOW_DAYS?'yellow':'',atRisk,maxMiss};
 }
 
 // ============================================================
 // RENDER
 // ============================================================
-function renderAll(){renderHeader();renderToday();renderPlayers();renderSeason();renderAchievements();renderSettings();renderMorningReview()}
+let _renderCache=null;
+function renderAll(){
+  _renderCache={
+    mainPlayer:mainPlayer(),mainPlayerId:mainPlayerId(),
+    gameDay:isGameDay(),schedule:buildSchedule(G.seasonOrdinal||0),
+    gameDays:getGameDays(),completedCount:completedCount(),
+    phase:phase(),seasonDay:seasonDay(),warning:getWarning(),
+    todayLabel:todayLabel(),seasonOrdinal:G.seasonOrdinal||0,
+    ratingAvg:Math.round(PLAYERS.reduce((sum,p)=>sum+G.players[p.id].rating,0)/PLAYERS.length)
+  };
+  renderHeader();renderToday();renderPlayers();renderSeason();renderAchievements();renderSettings();
+  _renderCache=null;
+}
 
 function renderHeader(){
   document.getElementById('hWins').textContent=G.wins;
   document.getElementById('hLosses').textContent=G.losses;
   document.getElementById('hStreak').textContent=G.activeStreak;
-  document.getElementById('hLevel').textContent=Math.floor(G.totalTasksDone/50)+1;
-  document.getElementById('hPhase').textContent=phase();
-  document.getElementById('hDay').textContent=seasonDay();
-  document.getElementById('hMain').textContent=mainPlayer().name;
-  const w=getWarning();
+  document.getElementById('hLevel').textContent=Math.floor(G.totalTasksDone/CONST.LEVEL_TASKS_PER)+1;
+  document.getElementById('hPhase').textContent=_renderCache.phase;
+  document.getElementById('hDay').textContent=_renderCache.seasonDay;
+  document.getElementById('hMain').textContent=_renderCache.mainPlayer.name;
+  const w=_renderCache.warning;
   const wb=document.getElementById('warningBar');
   wb.className='warning-bar';wb.style.display='none';
-  if(w==='yellow'){wb.className='warning-bar yellow';wb.textContent='🟡 黄色警告：有球员连续3天未完成任务';wb.style.display='block'}
-  if(w==='orange'){wb.className='warning-bar orange';wb.textContent='🟠 橙色警告：P0/P1球员连续2周无进展';wb.style.display='block'}
-  if(w==='red'){wb.className='warning-bar red';wb.textContent='🔴 红色警告：系统需要急救！启动三步急救包';wb.style.display='block'}
+  if(w.level==='yellow'){
+    const names=w.atRisk.map(p=>p.emoji+p.name).join(' ');
+    wb.className='warning-bar yellow';
+    wb.innerHTML=`🟡 黄色警告：${names} 连续${w.maxMiss}天未完成`;
+    wb.style.display='block';
+  }
+  if(w.level==='orange'){
+    const names=w.atRisk.filter(p=>p.priority==='P0'||p.priority==='P1').map(p=>p.emoji+p.name).join(' ');
+    wb.className='warning-bar orange';
+    wb.innerHTML=`🟠 橙色警告：${names} 连续14天无进展`;
+    wb.style.display='block';
+  }
+  if(w.level==='red'){
+    wb.className='warning-bar red';
+    wb.innerHTML='🔴 红色警告：P0/P1双重失控！启动三步急救包';
+    wb.style.display='block';
+  }
+  // Nav badge
+  const todayNav=document.querySelector('.nav-btn[data-p="today"]');
+  const c=_renderCache.completedCount;
+  let badge=todayNav.querySelector('.nav-badge');
+  if(!badge){badge=document.createElement('span');badge.className='nav-badge';todayNav.appendChild(badge);}
+  if(c>0){badge.textContent=c+'/8';badge.style.cssText='background:var(--primary);color:#fff;font-size:9px;padding:1px 5px;border-radius:8px;margin-left:2px;font-weight:700;';}
+  else{badge.textContent='';badge.style.cssText='';}
 }
 
 function renderToday(){
-  const c=completedCount();
-  const mp=mainPlayer();
-  const gameDay=isGameDay();
-  const fix=todayFixture();
-  const ratingAvg=Math.round(PLAYERS.reduce((sum,p)=>sum+G.players[p.id].rating,0)/PLAYERS.length);
-  const completionPct=Math.round(c/8*100);
+  const c=_renderCache.completedCount;
+  const mp=_renderCache.mainPlayer;
+  const gameDay=_renderCache.gameDay;
+  const fix=gameDay?_renderCache.schedule.find(f=>f.day===_renderCache.seasonDay):null;
+  const ratingAvg=_renderCache.ratingAvg;
+  const completionPct=Math.round(c/CONST.PLAYER_COUNT*100);
   const noteText=gameDay
     ? (fix?`今日对阵 <b>${fix.opponent.name}</b>，关键球员完成度会直接影响赛果。`:'今日比赛日，完成关键球员任务提升胜率。')
     : `今日为训练日，训练评级按球员优先级与能力值加权，完成 <b>P0/P1</b> 会更快进入高效训练。`;
@@ -805,50 +816,69 @@ function renderToday(){
     dashboard.id='todayDashboard';
     todayRoot.insertBefore(dashboard,todayRoot.firstChild);
   }
+  // Evening reminder
+  let eveningTip='';
+  const bjHour=beijingNow().getHours();
+  if(bjHour>=18&&bjHour<24&&c<CONST.ACTIVE_STREAK_THRESHOLD&&c>0){
+    eveningTip=`<div style="margin-top:4px;color:var(--warning);font-size:10px">⏰ 已过18:00，仅完成${c}/8，抓紧时间！</div>`;
+  }
   dashboard.innerHTML=`
     <div class="data-strip">
       <div class="data-pill"><div class="k">完成率</div><div class="v">${completionPct}%</div><div class="s">${c}/8 球员</div></div>
       <div class="data-pill"><div class="k">球队OVR</div><div class="v">${ratingAvg}</div><div class="s">平均能力</div></div>
       <div class="data-pill"><div class="k">主格</div><div class="v">${mp.emoji}</div><div class="s">${mp.name}</div></div>
     </div>
-    <div class="coach-note">${noteText}</div>`;
+    <div class="coach-note">${noteText}${eveningTip}</div>`;
+  // Weekly summary
+  dashboard.insertAdjacentHTML('beforeend', renderWeeklySummary());
   // morning check
   const sleepOpts=['11点前','11-1点','1-3点','3点后'];
   const durOpts=['>6小时','4-6小时','<4小时'];
   document.getElementById('mcSleep').innerHTML=sleepOpts.map(o=>`<div class="mc-opt ${G.morningCheck.sleepTime===o?'selected':''}" onclick="setMC('sleepTime','${o}')">${o}</div>`).join('');
   document.getElementById('mcDuration').innerHTML=durOpts.map(o=>`<div class="mc-opt ${G.morningCheck.sleepDuration===o?'selected':''}" onclick="setMC('sleepDuration','${o}')">${o}</div>`).join('');
   document.getElementById('mcMood').innerHTML=[1,2,3,4,5].map(n=>`<div class="mood-btn ${G.morningCheck.mood===n?'selected':''}" onclick="setMC('mood',${n})">${['😫','😔','😐','😊','🔥'][n-1]}</div>`).join('');
-  // match
-  const mr=matchResult(G.dailyCompleted);
-  document.getElementById('matchScore').textContent=c;
-  const tag=document.getElementById('matchTag');
+  updateMorningInsight();
+  // match bar
+  const matchScore=document.getElementById('matchScore');
+  const matchTag=document.getElementById('matchTag');
   const oppEl=document.getElementById('opponentName');
-  tag.style.background='';tag.style.color='';tag.style.border='';
+  const dayLabel=document.getElementById('dayTypeLabel');
+  if(dayLabel)dayLabel.textContent=_renderCache.todayLabel;
+  matchScore.style.fontSize=''; // Reset any custom size
   if(!gameDay){
     const tr=trainingResult(G.dailyCompleted);
-    tag.textContent=tr.tag;
+    matchTag.textContent=tr.tag+(c>0?' '+Math.round(tr.pct*100)+'%':'');
     if(tr.cls==='warning'){
-      tag.className='result-tag draw';tag.style.background='rgba(245,158,11,0.16)';tag.style.color='var(--warning)';tag.style.border='1px solid rgba(245,158,11,0.32)';
-    }else tag.className='result-tag '+tr.cls;
+      matchTag.className='result-tag draw';matchTag.style.background='rgba(245,158,11,0.16)';matchTag.style.color='var(--warning)';matchTag.style.border='1px solid rgba(245,158,11,0.32)';
+    }else{matchTag.className='result-tag '+tr.cls;}
     oppEl.textContent='';
+    matchScore.textContent=c;
+  }else if(c===0){
+    matchTag.textContent='待开赛';matchTag.className='result-tag none';
+    oppEl.textContent=fix?'vs '+fix.opponent.name:'';
+    matchScore.textContent=c;
+  }else{
+    const mr=matchResult(G.dailyCompleted);
+    matchTag.textContent=mr.tag;matchTag.className='result-tag '+mr.cls;
+    oppEl.textContent=fix?'vs '+fix.opponent.name:'';
+    matchScore.textContent=c;
   }
-  else if(c===0){tag.textContent='待开赛';tag.className='result-tag none';oppEl.textContent=fix?'vs '+fix.opponent.name:'';}
-  else{tag.textContent=mr.tag;tag.className='result-tag '+mr.cls;oppEl.textContent=fix?'vs '+fix.opponent.name:'';}
-  // show day type label
-  const dayLabel=document.getElementById('dayTypeLabel');
-  if(dayLabel)dayLabel.textContent=todayLabel();
   // tasks
-  const mainId=mainPlayerId();
+  const mainId=_renderCache.mainPlayerId;
   const grid=document.getElementById('taskGrid');
   grid.innerHTML=PLAYERS.map(p=>{
     const done=G.dailyCompleted[p.id];
     const isMain=p.id===mainId;
+    const ps=G.players[p.id];
     const taskText=G.tasks&&G.tasks[p.id]?G.tasks[p.id]:p.task;
+    let streakHtml='';
+    if(ps.streak>0)streakHtml=`<span style="font-size:10px;color:var(--win);margin-left:6px">🔥${ps.streak}天</span>`;
+    else if(ps.missStreak>0)streakHtml=`<span style="font-size:10px;color:var(--lose);margin-left:6px">❄️${ps.missStreak}天</span>`;
     return`<div class="task-card ${done?'done':''} ${isMain?'main-focus':''}" onclick="toggleTask('${p.id}')">
       <div class="tc-emoji">${p.emoji}</div>
       <div class="tc-body">
-        <div class="tc-name">${p.name} <span class="badge ${p.priority.toLowerCase()}">${p.priority}</span>${isMain?' <span style="color:var(--gold);font-size:10px">★本周主格</span>':''}</div>
-        <div class="tc-dim">${p.dim}</div>
+        <div class="tc-name">${p.name} <span class="badge ${p.priority.toLowerCase()}">${p.priority}</span>${isMain?' <span style="color:var(--gold);font-size:10px">★本周主格</span>':''}<span style="margin-left:auto;font-size:13px;font-weight:900;color:var(--gold)">${ps.rating}</span></div>
+        <div class="tc-dim">${p.dim}${streakHtml}</div>
         <div class="tc-task">${taskText}</div>
       </div>
       <div class="tc-check">${done?'✓':''}</div>
@@ -856,12 +886,74 @@ function renderToday(){
   }).join('');
 }
 
+function renderWeeklySummary(){
+  const d=rawSeasonDay();
+  const weekStart=d-((d-1)%7);
+  if(d<1)return'';
+  const dayLabels=['日','一','二','三','四','五','六'];
+  let html='<div style="background:var(--card);border:1px solid var(--border-soft);border-radius:var(--radius);padding:10px 12px;margin-bottom:10px">';
+  html+='<div style="font-size:11px;font-weight:700;color:var(--text-dim);margin-bottom:8px">📅 本周概览</div>';
+  html+='<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px">';
+  // Day headers
+  for(let i=0;i<7;i++){
+    const day=weekStart+i;
+    if(day<1||day>d+1)continue;
+    const realDate=realDateForDay(day);
+    const dow=realDate.getDay();
+    html+=`<div style="text-align:center;font-size:9px;font-weight:700;color:var(--text-dim);padding:2px 0">${dayLabels[dow]}</div>`;
+  }
+  // Values row
+  for(let i=0;i<7;i++){
+    const day=weekStart+i;
+    if(day<1)continue;
+    if(day>d)break;
+    const realDate=realDateForDay(day);
+    const h=G.history?G.history.find(x=>{
+      const hd=new Date(x.date+'T00:00:00+08:00');
+      const sd=new Date(G.seasonStart+'T00:00:00+08:00');
+      return Math.floor((hd-sd)/CONST.MS_PER_DAY)+1===day;
+    }):null;
+    let val='-',valColor='var(--text-muted)',valBg='rgba(255,255,255,0.02)';
+    if(h){
+      // Past settled day — show result tag
+      if(h.isGame){
+        if(h.result.includes('胜')){val=h.result;valColor='var(--win)';}
+        else{val=h.result;valColor='var(--lose)';}
+      }else{
+        if(h.result==='高效训练'){val='高效';valColor='var(--win)';}
+        else if(h.result==='轻度训练'){val='轻训';valColor='var(--warning)';}
+        else if(h.result==='已训练'){val='训练';valColor='var(--text-dim)';}
+        else{val='休息';valColor='var(--text-muted)';}
+      }
+    }else if(day===d){
+      // Today — live preview
+      const todayGame=_renderCache.gameDay;
+      const todayComp=G.dailyCompleted;
+      const todayCount=_renderCache.completedCount;
+      if(todayGame&&todayCount>0){
+        const mr=matchResult(todayComp);
+        val=mr.tag;valColor=mr.cls==='win'?'var(--win)':'var(--lose)';
+      }else if(!todayGame&&todayCount>0){
+        const tr=trainingResult(todayComp);
+        if(tr.pct>=CONST.TRAINING_THRESHOLD_HIGH){val='高效';valColor='var(--win)';}
+        else if(tr.pct>=CONST.TRAINING_THRESHOLD_LIGHT){val='轻训';valColor='var(--warning)';}
+        else{val='训练';valColor='var(--text-dim)';}
+      }else{
+        val=todayCount+'/8';valColor='var(--text)';
+      }
+    }
+    html+=`<div style="text-align:center;font-size:10px;font-weight:700;color:${valColor};padding:3px 0 2px;background:${valBg};border-radius:4px">${val}</div>`;
+  }
+  html+='</div></div>';
+  return html;
+}
+
 function renderPlayers(){
   document.getElementById('radarWrap').innerHTML=buildRadar();
   document.getElementById('playerCards').innerHTML=PLAYERS.map(p=>{
     const ps=G.players[p.id];
-    const pct=((ps.rating-40)/(99-40))*100;
-    const tPct=((p.target-40)/(99-40))*100;
+    const pct=((ps.rating-CONST.RATING_MIN)/(CONST.RATING_MAX-CONST.RATING_MIN))*100;
+    const tPct=((p.target-CONST.RATING_MIN)/(CONST.RATING_MAX-CONST.RATING_MIN))*100;
     return`<div class="player-card">
       <div class="pc-emoji">${p.emoji}</div>
       <div class="pc-body">
@@ -874,17 +966,15 @@ function renderPlayers(){
 }
 
 function buildRadar(){
-  const cx=130,cy=130,r=90,n=8;
+  const cx=130,cy=130,r=90,n=CONST.PLAYER_COUNT;
   const step=Math.PI*2/n;
   let svg='<svg viewBox="0 0 260 260" width="100%" style="max-width:280px">';
-  // rings
-  [40,55,70,85,99].forEach(v=>{
-    const nr=(v-40)/(99-40);
+  [CONST.RATING_MIN,55,70,85,CONST.RATING_MAX].forEach(v=>{
+    const nr=(v-CONST.RATING_MIN)/(CONST.RATING_MAX-CONST.RATING_MIN);
     let pts=[];
     for(let i=0;i<n;i++){const a=-Math.PI/2+i*step;pts.push(`${cx+r*nr*Math.cos(a)},${cy+r*nr*Math.sin(a)}`);}
     svg+=`<polygon points="${pts.join(' ')}" fill="none" stroke="rgba(250,240,228,0.08)" stroke-width="0.5"/>`;
   });
-  // axes + labels
   PLAYERS.forEach((p,i)=>{
     const a=-Math.PI/2+i*step;
     svg+=`<line x1="${cx}" y1="${cy}" x2="${cx+r*Math.cos(a)}" y2="${cy+r*Math.sin(a)}" stroke="rgba(250,240,228,0.12)" stroke-width="0.5"/>`;
@@ -893,39 +983,35 @@ function buildRadar(){
     const vx=cx+(r+30)*Math.cos(a),vy=cy+(r+30)*Math.sin(a);
     svg+=`<text x="${vx}" y="${vy}" text-anchor="middle" dominant-baseline="middle" fill="#E8A025" font-size="8" font-weight="bold">${G.players[p.id].rating}</text>`;
   });
-  // target polygon
-  let tPts=PLAYERS.map((p,i)=>{const a=-Math.PI/2+i*step;const nr=(p.target-40)/(99-40);return`${cx+r*nr*Math.cos(a)},${cy+r*nr*Math.sin(a)}`;}).join(' ');
+  let tPts=PLAYERS.map((p,i)=>{const a=-Math.PI/2+i*step;const nr=(p.target-CONST.RATING_MIN)/(CONST.RATING_MAX-CONST.RATING_MIN);return`${cx+r*nr*Math.cos(a)},${cy+r*nr*Math.sin(a)}`;}).join(' ');
   svg+=`<polygon points="${tPts}" fill="none" stroke="rgba(200,90,26,0.3)" stroke-width="1" stroke-dasharray="3,3"/>`;
-  // current polygon
-  let cPts=PLAYERS.map((p,i)=>{const a=-Math.PI/2+i*step;const nr=(G.players[p.id].rating-40)/(99-40);return`${cx+r*nr*Math.cos(a)},${cy+r*nr*Math.sin(a)}`;}).join(' ');
+  let cPts=PLAYERS.map((p,i)=>{const a=-Math.PI/2+i*step;const nr=(G.players[p.id].rating-CONST.RATING_MIN)/(CONST.RATING_MAX-CONST.RATING_MIN);return`${cx+r*nr*Math.cos(a)},${cy+r*nr*Math.sin(a)}`;}).join(' ');
   svg+=`<polygon points="${cPts}" fill="rgba(232,160,37,0.25)" stroke="#E8A025" stroke-width="2"/>`;
-  // dots
-  PLAYERS.forEach((p,i)=>{const a=-Math.PI/2+i*step;const nr=(G.players[p.id].rating-40)/(99-40);svg+=`<circle cx="${cx+r*nr*Math.cos(a)}" cy="${cy+r*nr*Math.sin(a)}" r="3" fill="${p.color}"/>`;});
+  PLAYERS.forEach((p,i)=>{const a=-Math.PI/2+i*step;const nr=(G.players[p.id].rating-CONST.RATING_MIN)/(CONST.RATING_MAX-CONST.RATING_MIN);svg+=`<circle cx="${cx+r*nr*Math.cos(a)}" cy="${cy+r*nr*Math.sin(a)}" r="3" fill="${p.color}"/>`;});
   svg+='</svg>';return svg;
 }
 
 function renderSeason(){
-  const d=seasonDay(),pct=Math.round(d/90*100);
+  const d=_renderCache.seasonDay,pct=Math.round(d/CONST.SEASON_DAYS*100);
   document.getElementById('seasonProgress').innerHTML=`
-    <div style="font-size:12px;color:var(--text-dim)">第${d}天 · ${phase()} · ${seasonLabel()}</div>
-    <div style="font-size:11px;color:var(--text-dim);margin-top:4px">📅 ${formatDate(realDateForDay(1))} — ${formatDate(realDateForDay(90))} · 今天 ${formatDate(realDateForDay(d))}</div>
+    <div style="font-size:12px;color:var(--text-dim)">第${d}天 · ${_renderCache.phase} · ${seasonLabel()}</div>
+    <div style="font-size:11px;color:var(--text-dim);margin-top:4px">📅 ${formatDate(realDateForDay(1))} — ${formatDate(realDateForDay(CONST.SEASON_DAYS))} · 今天 ${formatDate(beijingNow())}</div>
     <div class="progress-bar"><div class="fill" style="width:${pct}%"></div></div>
-    <div style="font-size:10px;color:var(--text-dim);display:flex;justify-content:space-between"><span>常规赛75天</span><span>季后赛12天</span><span>结算3天</span></div>`;
+    <div style="font-size:10px;color:var(--text-dim);display:flex;justify-content:space-between"><span>常规赛${CONST.REGULAR_SEASON_END}天</span><span>季后赛12天</span><span>结算3天</span></div>`;
   // Next game info
-  const nf=nextFixture();
+  const nf=nextFixture(_renderCache.schedule);
   const nfText=nf?`下一场：第${nf.day}天 ${nf.home?'主场':'客场'} vs ${nf.opponent.name}`:'本季赛程已结束';
   document.getElementById('seasonRecord').innerHTML=`
     <div class="record-row"><div class="big">${G.wins}-${G.losses}</div><div style="font-size:12px;color:var(--text-dim)">胜率 ${G.wins+G.losses>0?(G.wins/(G.wins+G.losses)).toFixed(3):'.000'}</div></div>
     <div style="font-size:11px;color:var(--text-dim);margin-top:6px">${nfText}</div>
     <div style="font-size:11px;color:var(--text-dim);margin-top:6px">最近比赛</div>
     <div class="recent-games">${G.recentGames.map(g=>`<div class="rg ${g==='W'?'w':'l'}">${g}</div>`).join('')}${G.recentGames.length===0?'<span style="font-size:11px;color:var(--text-dim)">暂无比赛记录</span>':''}</div>`;
+  const mp=_renderCache.mainPlayer;
   document.getElementById('seasonWeek').innerHTML=`
-    <div style="font-size:13px">本周主格：<b style="color:var(--gold)">${mainPlayer().emoji} ${mainPlayer().name}</b> — ${mainPlayer().dim}</div>
+    <div style="font-size:13px">本周主格：<b style="color:var(--gold)">${mp.emoji} ${mp.name}</b> — ${mp.dim}</div>
     <div style="font-size:11px;color:var(--text-dim);margin-top:6px">W${currentWeekIdx()+1} · 轮换顺序：${WEEK_ORDER.map((id,i)=>{const p=PLAYERS.find(x=>x.id===id);return i===currentWeekIdx()?`<b style="color:var(--gold)">${p.name}</b>`:p.name}).join(' → ')}</div>
     <div style="font-size:11px;color:var(--text-dim);margin-top:6px">连续活跃天数：🔥 ${G.activeStreak}天</div>`;
-  // Calendar grid
   renderCalendar();
-  // Archive
   renderArchive();
 }
 
@@ -1179,50 +1265,88 @@ function switchTab(t){
   document.getElementById('page-'+t).classList.add('active');
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.querySelector(`.nav-btn[data-p="${t}"]`).classList.add('active');
+  _renderCache={
+    mainPlayer:mainPlayer(),mainPlayerId:mainPlayerId(),
+    gameDay:isGameDay(),schedule:buildSchedule(G.seasonOrdinal||0),
+    gameDays:getGameDays(),completedCount:completedCount(),
+    phase:phase(),seasonDay:seasonDay(),warning:getWarning(),
+    todayLabel:todayLabel(),seasonOrdinal:G.seasonOrdinal||0,
+    ratingAvg:Math.round(PLAYERS.reduce((sum,p)=>sum+G.players[p.id].rating,0)/PLAYERS.length)
+  };
   if(t==='players')renderPlayers();if(t==='season')renderSeason();if(t==='achievements')renderAchievements();
+  _renderCache=null;
 }
 function toggleMorning(){
   const b=document.getElementById('morningBody'),t=document.getElementById('morningToggle');
   b.classList.toggle('open');t.classList.toggle('open');
 }
-function toggleMorningReview(){
-  const b=document.getElementById('mrBody'),t=document.getElementById('mrToggle');
-  b.classList.toggle('open');t.classList.toggle('open');
-}
-function saveMorningReview(showToast){
-  if(!G.morningReview)G.morningReview={};
-  G.morningReview.didRight=document.getElementById('mrDidRight')?.value||'';
-  G.morningReview.didWrong=document.getElementById('mrDidWrong')?.value||'';
-  G.morningReview.learned=document.getElementById('mrLearned')?.value||'';
-  G.morningReview.surprise=document.getElementById('mrSurprise')?.value||'';
-  G.morningReview.mostImportant=document.getElementById('mrMostImportant')?.value||'';
-  G.morningReview.playerGrow=document.getElementById('mrPlayerGrow')?.value||'';
-  G.morningReview.obstacle=document.getElementById('mrObstacle')?.value||'';
-  G.morningReview.saved=true;
-  save();
-  if(showToast)toast('💾 复盘与计划已保存','success');
-}
-function renderMorningReview(){
-  const mr=G.morningReview||{};
-  const fields={mrDidRight:'didRight',mrDidWrong:'didWrong',mrLearned:'learned',mrSurprise:'surprise',mrMostImportant:'mostImportant',mrPlayerGrow:'playerGrow',mrObstacle:'obstacle'};
-  Object.entries(fields).forEach(([elId,key])=>{
-    const el=document.getElementById(elId);
-    if(el)el.value=mr[key]||'';
-  });
-  // Show completion badge in header
-  const toggle=document.getElementById('mrToggle');
-  if(toggle&&mr.saved){
-    if(!toggle.querySelector('.mr-done-badge')){
-      toggle.insertAdjacentHTML('beforeend',' <span class="mr-done-badge">✓ 已填</span>');
-    }
+function setMC(k,v){
+  G.morningCheck[k]=v;save();
+  // Local DOM update — no full re-render to preserve panel open state
+  if(k==='mood'){
+    document.querySelectorAll('#mcMood .mood-btn').forEach((btn,i)=>{
+      btn.classList.toggle('selected',i+1===v);
+    });
+  }else{
+    const container=k==='sleepTime'?document.getElementById('mcSleep'):document.getElementById('mcDuration');
+    if(container)container.querySelectorAll('.mc-opt').forEach(opt=>{
+      opt.classList.toggle('selected',opt.textContent===v);
+    });
   }
+  updateMorningInsight(); // refresh analysis
+  toast('✓ 晨间状态已更新','success');
 }
-function setMC(k,v){G.morningCheck[k]=v;save();renderToday();toast('✓ 晨间状态已更新','success')}
+function updateMorningInsight(){
+  const hist=G.morningCheckHistory||[];
+  const mcBody=document.getElementById('morningBody');
+  let insightEl=document.getElementById('mcInsight');
+  if(!insightEl){insightEl=document.createElement('div');insightEl.id='mcInsight';mcBody.appendChild(insightEl);}
+  if(hist.length===0){
+    insightEl.innerHTML='<div class="mc-insight" style="padding-top:8px;border-top:1px solid var(--border-soft)">📊 记录几天后这里会出现睡眠与情绪分析</div>';
+    return;
+  }
+  const recent=hist.slice(-7);
+  const moodEmojis=['','😫','😔','😐','😊','🔥'];
+  const recentMoods=recent.map(h=>h.mood).filter(Boolean);
+  const avgMood=recentMoods.length>0?(recentMoods.reduce((a,b)=>a+b,0)/recentMoods.length).toFixed(1):'-';
+  const moodTrend=recentMoods.length>=2?(recentMoods[recentMoods.length-1]>=recentMoods[0]?'📈 上升':'📉 下降'):'';
+  const sleepCounts={};recent.forEach(h=>{if(h.sleepTime){sleepCounts[h.sleepTime]=(sleepCounts[h.sleepTime]||0)+1;}});
+  const topSleep=Object.entries(sleepCounts).sort((a,b)=>b[1]-a[1])[0];
+  const durCounts={};recent.forEach(h=>{if(h.sleepDuration){durCounts[h.sleepDuration]=(durCounts[h.sleepDuration]||0)+1;}});
+  const topDur=Object.entries(durCounts).sort((a,b)=>b[1]-a[1])[0];
+  const daysTracked=hist.length;
+  const checkRate=G.totalDays>0?Math.round(daysTracked/Math.max(1,G.totalDays)*100):0;
+  insightEl.innerHTML=`
+    <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft)">
+      <div style="font-size:11px;font-weight:700;color:var(--gold);margin-bottom:8px">📊 晨间分析（近7天 · 共${daysTracked}天记录 · ${checkRate}%打卡率）</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:10px">
+        <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:8px">
+          <div style="color:var(--text-dim);margin-bottom:3px">😴 常见入睡</div>
+          <div style="color:var(--text);font-weight:700">${topSleep?topSleep[0]:'-'}</div>
+          <div style="color:var(--text-muted)">${topSleep?topSleep[1]+'次':''}</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:8px">
+          <div style="color:var(--text-dim);margin-bottom:3px">⏱️ 常见时长</div>
+          <div style="color:var(--text);font-weight:700">${topDur?topDur[0]:'-'}</div>
+          <div style="color:var(--text-muted)">${topDur?topDur[1]+'次':''}</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:8px">
+          <div style="color:var(--text-dim);margin-bottom:3px">😊 平均情绪</div>
+          <div style="color:var(--text);font-weight:700">${avgMood} ${avgMood!=='-'?moodEmojis[Math.round(avgMood)]||'':''}</div>
+          <div style="color:var(--text-muted)">${moodTrend}</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:8px">
+          <div style="color:var(--text-dim);margin-bottom:3px">🔥 情绪趋势</div>
+          <div style="font-size:13px;letter-spacing:2px">${recent.map(h=>moodEmojis[h.mood]||'·').join('')}</div>
+        </div>
+      </div>
+    </div>`;
+}
 function updateTask(el){if(!G.tasks)G.tasks={};G.tasks[el.dataset.pid]=el.value;save()}
 function saveSettings(){G.seasonStart=document.getElementById('setStart').value;save();renderAll();toast('✅ 设置已保存','success')}
 function exportData(){const b=new Blob([JSON.stringify(G,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='minho_os_backup.json';a.click();toast('📤 数据已导出','success')}
 function importData(){const i=document.createElement('input');i.type='file';i.accept='.json';i.onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{G=JSON.parse(ev.target.result);save();renderAll();toast('📥 数据已导入','success')}catch(e){toast('❌ 文件格式错误','error')}};r.readAsText(f)};i.click()}
-function resetGame(){if(confirm('确定重置所有数据？')&&confirm('再次确认？')){localStorage.removeItem('minho_os_v8');G=getDefault();save();renderAll();toast('🔄 已重置全部数据','warning')}}
+function resetGame(){if(confirm('确定重置所有数据？')&&confirm('再次确认？')){localStorage.removeItem(CONST.STORAGE_KEY);G=getDefault();save();renderAll();toast('🔄 已重置全部数据','warning')}}
 function toast(msg,type){const c=document.getElementById('toasts');const t=document.createElement('div');t.className='toast'+(type?' toast-'+type:'');t.textContent=msg;c.appendChild(t);setTimeout(()=>t.remove(),2800)}
 
 // ============================================================
@@ -1317,20 +1441,44 @@ window.syncExport=syncExport;window.syncImportPrompt=syncImportPrompt;
 window.copySyncCode=copySyncCode;window.copySyncUrl=copySyncUrl;
 
 window.toggleTask=toggleTask;window.switchTab=switchTab;window.toggleMorning=toggleMorning;
-window.toggleMorningReview=toggleMorningReview;window.saveMorningReview=saveMorningReview;
 window.setMC=setMC;window.updateTask=updateTask;window.saveSettings=saveSettings;
 window.exportData=exportData;window.importData=importData;window.resetGame=resetGame;
 
 // INIT — sync season to real time on every load
+function shouldAdvanceSeason(){
+  // Only advance if the NEXT season has actually started
+  const nextOrd=(G.seasonOrdinal||0)+1;
+  const nextStart=calcSeasonStartDate(nextOrd);
+  return new Date(today()+'T00:00:00+08:00')>=new Date(nextStart+'T00:00:00+08:00');
+}
+
 function syncSeason(){
-  // Method 1: use rawSeasonDay to catch up
+  // If current season hasn't started yet, roll back to previous season
+  while(rawSeasonDay()<1&&(G.seasonOrdinal||0)>0){
+    const prevLabel=seasonLabel(G.seasonOrdinal-1);
+    const prevArchive=(G.archive||[]).find(a=>a.season===prevLabel);
+    if(prevArchive){
+      G.wins=prevArchive.wins||0;G.losses=prevArchive.losses||0;
+      G.totalDays=prevArchive.totalDays||0;G.awards=prevArchive.awards||[];
+      G.history=prevArchive.history||[];
+      if(prevArchive.ratings){Object.entries(prevArchive.ratings).forEach(([id,r])=>{if(G.players[id])G.players[id].rating=r;});}
+      G.archive=G.archive.filter(a=>a.season!==prevLabel);
+    }
+    G.seasonOrdinal--;G.seasonStart=calcSeasonStartDate(G.seasonOrdinal);
+    _gameDayCache=null;_gameDayCacheOrd=null;
+  }
+  // Forward catch-up
   let attempts=0;
-  while(rawSeasonDay()>90&&attempts<20){archiveSeason();attempts++;}
-  // Method 2: if ordinal is still behind (e.g. corrupted seasonStart), force fix
+  while(rawSeasonDay()>CONST.SEASON_DAYS&&attempts<20){
+    if(!shouldAdvanceSeason())break;
+    archiveSeason();attempts++;
+  }
   const correctOrd=calcInitialOrdinal();
   if((G.seasonOrdinal||0)<correctOrd){
-    // Force catch up to current season
-    while((G.seasonOrdinal||0)<correctOrd){archiveSeason();}
+    while((G.seasonOrdinal||0)<correctOrd){
+      if(!shouldAdvanceSeason())break;
+      archiveSeason();
+    }
   }
 }
 syncSeason();
