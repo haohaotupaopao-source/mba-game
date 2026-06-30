@@ -2,8 +2,15 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <title>MBA · 绝望的烤鸡</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="绝望的烤鸡">
+<meta name="theme-color" content="#080A0F">
+<meta name="description" content="Minho的NBA主题自律游戏">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23080A0F'/><text y='.9em' font-size='70' text-anchor='middle' x='50'>🍗</text></svg>">
 <style>
 :root {
   --bg:#080A0F;--surface:#111723;--surface-2:#151D2B;--card:#182231;--card-2:#1D2A3D;
@@ -1484,6 +1491,10 @@ function syncSeason(){
 syncSeason();
 checkUrlSync();
 dailyReset();renderAll();
+// PWA: register service worker for offline support
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
 </script>
 </div>
 </body>
